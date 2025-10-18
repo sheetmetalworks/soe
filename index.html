@@ -236,6 +236,27 @@
             </div>
         </div>
     </section>
+    <!-- Waluj MIDC Facility -->
+    <section class="relative z-10 py-16 bg-metal-800 text-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Waluj MIDC Facility</h2>
+                <p class="text-metal-300 max-w-2xl mx-auto">State-of-the-art manufacturing facility equipped with modern machinery</p>
+                <div class="w-20 h-1 bg-accent-500 mx-auto mt-4"></div>
+            </div>
+
+            <div class="relative overflow-hidden">
+                <div class="flex transition-transform duration-500 ease-in-out" id="facility-carousel"></div>
+
+                <button id="facility-prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-metal-100 transition">
+                    <i data-feather="chevron-left" class="h-6 w-6 text-accent-500"></i>
+                </button>
+                <button id="facility-next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-metal-100 transition">
+                    <i data-feather="chevron-right" class="h-6 w-6 text-accent-500"></i>
+                </button>
+            </div>
+        </div>
+    </section>
 
     <!-- Client Showcase -->
 <section class="relative z-10 py-16 bg-metal-800 text-white">
@@ -392,8 +413,61 @@
     </footer>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+    // Facility Images Carousel
+    const facilityImages = [
+        "facility1.jpg",
+        "facility2.jpg",
+        "facility3.jpg",
+        "facility4.jpg"
+        // Add actual facility image filenames here
+    ];
+
+    const facilityCarousel = document.getElementById("facility-carousel");
+
+    facilityImages.forEach(imgSrc => {
+        const slide = document.createElement("div");
+        slide.className = "min-w-full md:min-w-[50%] lg:min-w-[33.33%] p-4";
+        slide.innerHTML = `
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="facility/${imgSrc}" alt="Facility image" class="w-full h-64 object-cover rounded-lg">
+                <div class="p-4">
+                    <h3 class="text-lg font-bold text-metal-800"></h3>
+                </div>
+            </div>
+        `;
+        facilityCarousel.appendChild(slide);
+    });
+
+    // Facility Carousel Logic
+    let facilityCurrentSlide = 0;
+    const facilitySlides = document.querySelectorAll("#facility-carousel > div");
+    const totalFacilitySlides = facilitySlides.length;
+
+    function updateFacilityCarousel() {
+        const offset = -facilityCurrentSlide * (facilitySlides[0].offsetWidth || 0);
+        facilityCarousel.style.transform = `translateX(${offset}px)`;
+    }
+
+    document.getElementById("facility-next-btn").addEventListener("click", () => {
+        facilityCurrentSlide = (facilityCurrentSlide + 1) % totalFacilitySlides;
+        updateFacilityCarousel();
+    });
+
+    document.getElementById("facility-prev-btn").addEventListener("click", () => {
+        facilityCurrentSlide = (facilityCurrentSlide - 1 + totalFacilitySlides) % totalFacilitySlides;
+        updateFacilityCarousel();
+    });
+
+    // Auto-rotate facility carousel
+    setInterval(() => {
+        facilityCurrentSlide = (facilityCurrentSlide + 1) % totalFacilitySlides;
+        updateFacilityCarousel();
+    }, 5000);
+
+    // Original Product Gallery Script
+    // Product Gallery
     const productImages = [
-        "t1.jpg",
+"t1.jpg",
         "t2.jpg",
         "t3.jpg",
         "t4.jpg",
