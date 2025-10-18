@@ -390,93 +390,60 @@
             </div>
         </div>
     </footer>
-    <script>
-        // Product Gallery - Load all images from products directory
-        fetch('products/')
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a'))
-                    .map(a => a.getAttribute('href'))
-                    .filter(href => href.match(/\.(jpg|jpeg|png|gif)$/i));
-                
-                const carousel = document.getElementById('product-carousel');
-                links.forEach(imgSrc => {
-                    const slide = document.createElement('div');
-                    slide.className = 'min-w-full md:min-w-[50%] lg:min-w-[33.33%] p-4';
-                    slide.innerHTML = `
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                            <img src="products/${imgSrc}" alt="Our Product" class="w-full h-64 object-cover">
-                            <div class="p-4">
-                                <h3 class="text-lg font-bold text-metal-800">Our Product</h3>
-                            </div>
-                        </div>
-                    `;
-                    carousel.appendChild(slide);
-                });
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const productImages = [
+        "t1.jpg",
+        "tractor_part2.jpg",
+        "machine_bracket.jpg",
+        "engine_mount.jpg"
+        // 👉 add your actual image filenames here from /products/
+    ];
 
-                // Initialize carousel after images are loaded
-                let currentSlide = 0;
-                const slides = document.querySelectorAll('#product-carousel > div');
-                const slideWidth = slides[0]?.offsetWidth || 0;
-                const totalSlides = slides.length;
+    const carousel = document.getElementById("product-carousel");
 
-                document.getElementById('next-btn')?.addEventListener('click', () => {
-                    currentSlide = (currentSlide + 1) % totalSlides;
-                    updateCarousel();
-                });
+    // Create slides
+    productImages.forEach(imgSrc => {
+        const slide = document.createElement("div");
+        slide.className = "min-w-full md:min-w-[50%] lg:min-w-[33.33%] p-4";
+        slide.innerHTML = `
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="products/${imgSrc}" alt="Product image" class="w-full h-64 object-cover rounded-lg">
+                <div class="p-4">
+                    <h3 class="text-lg font-bold text-metal-800">Sheet Metal Component</h3>
+                </div>
+            </div>
+        `;
+        carousel.appendChild(slide);
+    });
 
-                document.getElementById('prev-btn')?.addEventListener('click', () => {
-                    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-                    updateCarousel();
-                });
+    // Simple carousel logic
+    let currentSlide = 0;
+    const slides = document.querySelectorAll("#product-carousel > div");
+    const totalSlides = slides.length;
 
-                function updateCarousel() {
-                    if (totalSlides > 0) {
-                        const offset = -currentSlide * slideWidth;
-                        carousel.style.transform = `translateX(${offset}px)`;
-                    }
-                }
+    function updateCarousel() {
+        const offset = -currentSlide * (slides[0].offsetWidth || 0);
+        carousel.style.transform = `translateX(${offset}px)`;
+    }
 
-                // Auto-rotate carousel
-                if (totalSlides > 0) {
-                    setInterval(() => {
-                        currentSlide = (currentSlide + 1) % totalSlides;
-                        updateCarousel();
-                    }, 5000);
-                }
-            })
-            .catch(err => console.error('Error loading product images:', err));
-// Initialize Vanta.js background
-VANTA.WAVES({
-            el: "#vanta-bg",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0x334e68,
-            shininess: 60.00,
-            waveHeight: 20.00,
-            waveSpeed: 0.80,
-            zoom: 0.85
-        });
+    document.getElementById("next-btn").addEventListener("click", () => {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+    });
 
-        // Initialize feather icons
-        feather.replace();
-        
-        // Simple scroll animation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
+    document.getElementById("prev-btn").addEventListener("click", () => {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+    });
+
+    // Auto-rotate
+    setInterval(() => {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+    }, 5000);
+});
+</script>
+
 </body>
 </html>
