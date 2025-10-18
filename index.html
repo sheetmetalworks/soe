@@ -214,9 +214,31 @@
             </div>
         </div>
     </section>
+    <!-- Product Gallery -->
+    <section class="relative z-10 py-16 bg-metal-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-metal-800 mb-4">Our Product Gallery</h2>
+                <p class="text-metal-600 max-w-2xl mx-auto">Explore our precision sheet metal products</p>
+                <div class="w-20 h-1 bg-accent-500 mx-auto mt-4"></div>
+            </div>
+
+            <div class="relative overflow-hidden">
+                <div class="flex transition-transform duration-500 ease-in-out" id="product-carousel">
+</div>
+
+                <button id="prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-metal-100 transition">
+                    <i data-feather="chevron-left" class="h-6 w-6 text-accent-500"></i>
+                </button>
+                <button id="next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-metal-100 transition">
+                    <i data-feather="chevron-right" class="h-6 w-6 text-accent-500"></i>
+                </button>
+            </div>
+        </div>
+    </section>
 
     <!-- Client Showcase -->
-    <section class="relative z-10 py-16 bg-metal-800 text-white">
+<section class="relative z-10 py-16 bg-metal-800 text-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">Trusted By Industry Leaders</h2>
@@ -328,8 +350,9 @@
                         <li><a href="#" class="text-metal-400 hover:text-white transition">Home</a></li>
                         <li><a href="#services" class="text-metal-400 hover:text-white transition">Services</a></li>
                         <li><a href="#about" class="text-metal-400 hover:text-white transition">About Us</a></li>
-                        <li><a href="#contact" class="text-metal-400 hover:text-white transition">Contact</a></li>
-                    </ul>
+                    <li><a href="#contact" class="text-metal-400 hover:text-white transition">Contact</a></li>
+                    <li><a href="#products" class="text-metal-400 hover:text-white transition">Products</a></li>
+</ul>
                 </div>
                 
                 <div>
@@ -367,10 +390,66 @@
             </div>
         </div>
     </footer>
-
     <script>
-        // Initialize Vanta.js background
-        VANTA.WAVES({
+        // Product Gallery - Load all images from products directory
+        fetch('products/')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const links = Array.from(doc.querySelectorAll('a'))
+                    .map(a => a.getAttribute('href'))
+                    .filter(href => href.match(/\.(jpg|jpeg|png|gif)$/i));
+                
+                const carousel = document.getElementById('product-carousel');
+                links.forEach(imgSrc => {
+                    const slide = document.createElement('div');
+                    slide.className = 'min-w-full md:min-w-[50%] lg:min-w-[33.33%] p-4';
+                    slide.innerHTML = `
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <img src="products/${imgSrc}" alt="Our Product" class="w-full h-64 object-cover">
+                            <div class="p-4">
+                                <h3 class="text-lg font-bold text-metal-800">Our Product</h3>
+                            </div>
+                        </div>
+                    `;
+                    carousel.appendChild(slide);
+                });
+
+                // Initialize carousel after images are loaded
+                let currentSlide = 0;
+                const slides = document.querySelectorAll('#product-carousel > div');
+                const slideWidth = slides[0]?.offsetWidth || 0;
+                const totalSlides = slides.length;
+
+                document.getElementById('next-btn')?.addEventListener('click', () => {
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    updateCarousel();
+                });
+
+                document.getElementById('prev-btn')?.addEventListener('click', () => {
+                    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                    updateCarousel();
+                });
+
+                function updateCarousel() {
+                    if (totalSlides > 0) {
+                        const offset = -currentSlide * slideWidth;
+                        carousel.style.transform = `translateX(${offset}px)`;
+                    }
+                }
+
+                // Auto-rotate carousel
+                if (totalSlides > 0) {
+                    setInterval(() => {
+                        currentSlide = (currentSlide + 1) % totalSlides;
+                        updateCarousel();
+                    }, 5000);
+                }
+            })
+            .catch(err => console.error('Error loading product images:', err));
+// Initialize Vanta.js background
+VANTA.WAVES({
             el: "#vanta-bg",
             mouseControls: true,
             touchControls: true,
