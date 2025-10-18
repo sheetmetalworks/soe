@@ -1,18 +1,18 @@
-## Portfolio
+## Metal Processing Facility
 
 ---
 
 ### Category Name 1 
 
-[Project 1 Title](/sample_page)
+[Sheet Metal Works](/sample_page)
 <img src="images/dummy_thumbnail.jpg?raw=true"/>
 
 ---
-[Project 2 Title](/pdf/sample_presentation.pdf)
+[Welding Works](/pdf/sample_presentation.pdf)
 <img src="images/dummy_thumbnail.jpg?raw=true"/>
 
 ---
-[Animated photo also works](http://example.com/)
+[Sheet Metal die manufacturing](http://example.com/)
 <img src="https://media.giphy.com/media/MGdfeiKtEiEPS/giphy.gif?raw=true"/>
 
 ---
